@@ -11,7 +11,7 @@ setup(
     url='https://github.com/president-xd/Cryptix',
     packages=find_packages(),
     install_requires=[
-        'numpy', 
+        'numpy',
         'cryptography'
     ],
     classifiers=[
