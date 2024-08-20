@@ -1,5 +1,5 @@
 import unittest
-from Cryptix import Cryptix
+from ..cryptix import Cryptix
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
