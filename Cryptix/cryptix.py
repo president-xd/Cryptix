@@ -301,7 +301,7 @@ class Cryptix:
         return decrypted_text   
 
     @staticmethod
-    def decrypt_one_time_pad():
+    def decrypt_one_time_pad_cipher():
         """Decrypt using One-Time Pad cipher"""
         try:
             text_file_path = input("Enter the path to the text file: ")
@@ -352,7 +352,7 @@ class Cryptix:
     
 
     @staticmethod
-    def decrypt_xor_cipher_string(content: str, key: int) -> str:
+    def decrypt_xor_cipher(content: str, key: int) -> str:
         """
         Decrypts 'content' using XOR cipher with a given 'key'.
         Returns the decrypted content as a string.
@@ -381,7 +381,7 @@ class Cryptix:
             return ""
         
     @staticmethod
-    def bacon_cipher_decrypt(ciphertext):
+    def decrypt_bacon_cipher(ciphertext):
         """
         Decrypts a string of Bacon's cipher text into plaintext.
         
@@ -406,7 +406,7 @@ class Cryptix:
         
         return plaintext
     @staticmethod
-    def decrypt_columnar_transposition(ciphertext, keyword):
+    def decrypt_columnar_transposition_cipher(ciphertext, keyword):
         """Decrypts the ciphertext using the Columnar Transposition cipher with the provided keyword."""
         try:
             n_cols = len(keyword)
@@ -425,7 +425,7 @@ class Cryptix:
             print(EXCEPTION_MESSAGE, ex)
 
     @staticmethod
-    def decrypt2_one_time_pad(text, keys):
+    def decrypt2_one_time_pad_cipher(text, keys):
         """Decrypt using One-Time Pad cipher (pre-loaded text and keys)"""
         try:
             return "".join([chr(ord(text[i]) ^ int(keys[i])) for i in range(len(text))])
@@ -497,7 +497,7 @@ class Cryptix:
         except (ValueError, IndexError) as ex:
             print(EXCEPTION_MESSAGE, ex)
     @staticmethod
-    def rsa_cipher_decrypt(ciphertext: str, private_key_path: str):
+    def decrypt_rsa_cipher(ciphertext: str, private_key_path: str):
         """Decrypts the ciphertext using the RSA cipher with the provided private key file path and prints results for different padding schemes."""
         try:
             # Decode the Base64-encoded ciphertext
@@ -553,17 +553,12 @@ class Cryptix:
                 decrypted_text += str(index % 10)
             else:
                 decrypted_text += l
-        return decrypted_text
-    
-
-
-
-
+        return decrypted_text    
 
     ## Below this are the functions for decoding the Encoded text
 
     @staticmethod
-    def decode_binary(char: str) -> str:
+    def decode_binary_encoding(char: str) -> str:
         """Returns the decrypted text for Binary."""
         if " " not in char and len(char) > 8:
             raise ValueError("Input binary string seems to be missing spaces between bytes.")
@@ -571,7 +566,7 @@ class Cryptix:
         return binary_translated
 
     @staticmethod
-    def decode_hexadecimal(char: str) -> str:
+    def decode_hexadecimal_encoding(char: str) -> str:
         """Returns the decrypted text for Hexadecimal."""
         if " " not in char and len(char) > 2:
             raise ValueError("Input hexadecimal string seems to be missing spaces between bytes.")
@@ -579,7 +574,7 @@ class Cryptix:
         return hexadecimal_translated
 
     @staticmethod
-    def decode_octal(char: str) -> str:
+    def decode_octal_encoding(char: str) -> str:
         """Returns the decrypted text for Octal."""
         if " " not in char and len(char) > 3:
             raise ValueError("Input octal string seems to be missing spaces between bytes.")
@@ -587,7 +582,7 @@ class Cryptix:
         return octal_translated
 
     @staticmethod
-    def decode_ascii(char: str) -> str:
+    def decode_ascii_encoding(char: str) -> str:
         """Returns the decrypted text for ASCII."""
         if " " not in char:
             raise ValueError("Input ASCII string seems to be missing spaces between numbers.")
@@ -595,17 +590,17 @@ class Cryptix:
         return ascii_translated
 
     @staticmethod
-    def decode_url(char: str) -> str:
+    def decode_url_encoding(char: str) -> str:
         """Returns the decrypted text for URL Encoding."""
         return urllib.parse.unquote(char)
 
     @staticmethod
-    def decode_unicode_point(char: str) -> str:
+    def decode_unicode_point_encoding(char: str) -> str:
         """Returns the decrypted text for Unicode."""
         return "".join(chr(int(uni, 16)) for uni in str(char).split(" "))
 
     @staticmethod
-    def decode_base32(char: str) -> str:
+    def decode_base32_encoding(char: str) -> str:
         """Returns the decrypted text for Base32."""
         base32_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567="
             
@@ -624,7 +619,7 @@ class Cryptix:
         return decoded_text
 
     @staticmethod
-    def decode_base64(encoded_str: str) -> str:
+    def decode_base64_encoding(encoded_str: str) -> str:
         """Returns the decoded text for Base64."""
         base64_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
         padding = '='
@@ -660,7 +655,7 @@ class Cryptix:
         return decoded_text   
 
     @staticmethod
-    def decode_base58(char: str) -> str:
+    def decode_base58_encoding(char: str) -> str:
         """Returns the decrypted text for Base58."""
         base58_alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz!#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
         
@@ -687,7 +682,7 @@ class Cryptix:
         return decoded_text
 
     @staticmethod
-    def decode_morse_code(morse_code):
+    def decode_morse_code_encoding(morse_code):
         """Convert Morse code to text."""
         reverse_dict = {value: key for key, value in MORSE_CODE_DICT.items()}
         morse_code = morse_code.strip().split(' ')
