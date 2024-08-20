@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name='Cryptix',
     version='0.1.0',
-    description='A versatile cryptography library for various encryption and decryption techniques.',
+    description='A versatile cryptography library ' \
+    'for various encryption and decryption techniques.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     author='Mohsin Mukhtiar Lashari Baloch',
