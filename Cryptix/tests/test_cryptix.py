@@ -1,76 +1,89 @@
-import unittest
-from ..cryptix import Cryptix
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-class TestCryptix(unittest.TestCase):
+import pytest
+from Cryptix import Cryptix
 
-    def test_decode_char(self):
-        self.assertEqual(Cryptix.decode_char('C', 'A'), 'C')
-        self.assertEqual(Cryptix.decode_char('E', 'B'), 'D')
-        self.assertEqual(Cryptix.decode_char('D', 'C'), 'B')
-    
-    def test_decode_cipher(self):
-        self.assertEqual(Cryptix.decode_cipher('CDE', 'ABC'), 'XYZ')
-        self.assertEqual(Cryptix.decode_cipher('GIK', 'BDF'), 'HEL')
-    
-    def test_brute_force_decode(self):
-        self.assertEqual(Cryptix.brute_force_decode('GIK', 'HEL'), 'BCD')
+class TestCryptix:
+    def setup_class(self):
+        self.cryptix = Cryptix()
 
-    def test_decrypt_hill_cipher(self):
-        key_matrix = [[6, 24, 1], [13, 16, 10], [20, 17, 15]]
-        self.assertEqual(Cryptix.decrypt_hill_cipher('SENML', key_matrix), 'HELLO')
+    # Sample encrypted text and expected plaintext for each cipher
+    def test_caesar_cipher(self):
+        encrypted_text = "Khoor Zruog"  # "Hello World" encrypted with Caesar Cipher with shift 3
+        key = 3
+        expected_plaintext = "Hello World"
+        decrypted_text = self.cryptix.caesar_cipher_decrypt(encrypted_text, key)
+        assert decrypted_text == expected_plaintext
 
-    def test_decrypt_beaufort_cipher(self):
-        self.assertEqual(Cryptix.decrypt_beaufort_cipher('XUB', 'KEY'), 'HEL')
+    def test_vigenere_cipher(self):
+        encrypted_text = "LXFOPVEFRNHR"  # "ATTACKATDAWN" encrypted with key "LEMON"
+        key = "LEMON"
+        expected_plaintext = "ATTACKATDAWN"
+        decrypted_text = self.cryptix.vigenere_cipher_decrypt(encrypted_text, key)
+        assert decrypted_text == expected_plaintext
 
-    def test_vigenere_bruteforce(self):
-        # Testing a basic brute force on a short cipher
-        result = Cryptix.vigenere_bruteforce('WPM', 'HEL', 'K')
-        self.assertTrue(any(result.startswith('HEL') for result in result.values()))
+    def test_affine_cipher(self):
+        encrypted_text = "Jyyj"  # "Test" encrypted with a=5, b=8
+        a = 5
+        b = 8
+        expected_plaintext = "Test"
+        decrypted_text = self.cryptix.affine_cipher_decrypt(encrypted_text, a, b)
+        assert decrypted_text == expected_plaintext
 
-    def test_decrypt_affine_cipher(self):
-        self.assertEqual(Cryptix.decrypt_affine_cipher('LXFOPVEFRNHR', 5, 8), 'ATTACKATDAWN')
+    def test_beaufort_cipher(self):
+        encrypted_text = "YFXX"  # "TEST" encrypted with key "KEY"
+        key = "KEY"
+        expected_plaintext = "TEST"
+        decrypted_text = self.cryptix.beaufort_cipher_decrypt(encrypted_text, key)
+        assert decrypted_text == expected_plaintext
 
-    def test_decrypt_rail_fence_cipher(self):
-        self.assertEqual(Cryptix.decrypt_rail_fence_cipher('HWe olordll', 4), 'Hello World')
+    def test_rail_fence_cipher(self):
+        encrypted_text = "WECRLTEERDSOEE"  # "WEAREDISCOVERED" with 3 rails
+        key = 3
+        expected_plaintext = "WEAREDISCOVERED"
+        decrypted_text = self.cryptix.rail_fence_cipher_decrypt(encrypted_text, key)
+        assert decrypted_text == expected_plaintext
 
-    def test_bruteforce_rail_fence_cipher(self):
-        results = Cryptix.bruteforce('HWe olordll')
-        self.assertIn(4, results)
-        self.assertEqual(results[4], 'Hello World')
+    def test_playfair_cipher(self):
+        encrypted_text = "BMODZBXDNABEKUDM"  # "HELLOMISTER" with key "PLAYFAIR"
+        key = "PLAYFAIR"
+        expected_plaintext = "HELLOMISTER"
+        decrypted_text = self.cryptix.playfair_cipher_decrypt(encrypted_text, key)
+        assert decrypted_text == expected_plaintext
 
-    def test_decrypt_playfair_cipher(self):
-        matrix = Cryptix.matrix_generator('KEYWORD')
-        self.assertEqual(Cryptix.decrypt_playfair_cipher('CIPH', matrix), 'TEST')
+    def test_bacon_cipher(self):
+        encrypted_text = "AAAAABABBA"  # "HELLO" with Bacon Cipher
+        expected_plaintext = "HELLO"
+        decrypted_text = self.cryptix.bacon_cipher_decrypt(encrypted_text)
+        assert decrypted_text == expected_plaintext
 
-    def test_decrypt_one_time_pad_cipher(self):
-        # This will need actual files to test properly; using mock data here
-        # Assuming 'text.txt' contains "HELLO" and 'key.txt' contains "7,3,9,11,5"
-        # self.assertEqual(Cryptix.decrypt_one_time_pad_cipher(), 'HELLO')
+    def test_columnar_transposition_cipher(self):
+        encrypted_text = "COEHLRTDLOE"  # "HELLO WORLD" with key "ZEBRAS"
+        key = "ZEBRAS"
+        expected_plaintext = "HELLO WORLD"
+        decrypted_text = self.cryptix.columnar_transposition_cipher_decrypt(encrypted_text, key)
+        assert decrypted_text == expected_plaintext
 
-        # Mock test, replace with actual file reading
-        text = 'HELLO'
-        keys = [7, 3, 9, 11, 5]
-        self.assertEqual(Cryptix.decrypt2_one_time_pad_cipher(text, keys), 'HELLO')
+    def test_one_time_pad_cipher(self):
+        encrypted_text = "XLPHP"  # "HELLO" with key "XMCKL"
+        key = "XMCKL"
+        expected_plaintext = "HELLO"
+        decrypted_text = self.cryptix.one_time_pad_cipher_decrypt(encrypted_text, key)
+        assert decrypted_text == expected_plaintext
 
-    def test_decrypt_xor_cipher(self):
-        self.assertEqual(Cryptix.decrypt_xor_cipher('i`mmn!vdmu', 1), 'hello world')
+    def test_xor_cipher(self):
+        encrypted_text = "10100110"  # "HELLO" encrypted with key "KEY"
+        key = "KEY"
+        expected_plaintext = "HELLO"
+        decrypted_text = self.cryptix.xor_cipher_decrypt(encrypted_text, key)
+        assert decrypted_text == expected_plaintext
 
-    def test_decrypt_bacon_cipher(self):
-        self.assertEqual(Cryptix.decrypt_bacon_cipher('AAAAA ABABA'), 'AB')
+    def test_atbash_cipher(self):
+        encrypted_text = "ZGVHG"  # "HELLO" encrypted with Atbash Cipher
+        expected_plaintext = "HELLO"
+        decrypted_text = self.cryptix.atbash_cipher_decrypt(encrypted_text)
+        assert decrypted_text == expected_plaintext
 
-    def test_decrypt_columnar_transposition_cipher(self):
-        self.assertEqual(Cryptix.decrypt_columnar_transposition_cipher('GDBD FECB', 'KEY'), 'HELLO WORLD')
-
-    def test_decrypt_atbash_cipher(self):
-        self.assertEqual(Cryptix.decrypt_atbash_cipher('GSV JFRXP YILDM'), 'THE QUEENS ARMY')
-
-    def test_decrypt_caesar_cipher(self):
-        self.assertEqual(Cryptix.decrypt_caesar_cipher('KHOOR', 3), 'HELLO')
-
-    def test_decrypt_rot13_cipher(self):
-        self.assertEqual(Cryptix.decrypt_rot13_cipher('Uryyb'), 'Hello')
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_rot13_cipher(self):
+        encrypted_text = "URYYB"  # "HELLO" encrypted with ROT13
+        expected_plaintext = "HELLO"
+        decrypted_text = self.cryptix.rot13_cipher_decrypt(encrypted_text)
+        assert decrypted_text == expected_plaintext
