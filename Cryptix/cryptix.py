@@ -8,7 +8,6 @@ from cryptography.hazmat.primitives import serialization
 import base64
 from typing import List
 
-
 EXCEPTION_MESSAGE = "Exception occurred: "
 
 # Extended Morse code dictionary with some special characters
@@ -19,12 +18,12 @@ MORSE_CODE_DICT = {
     'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
     'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---',
     '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
-    '8': '---..', '9': '----.', ' ': '/', 
-    '.': '.-.-.-', ',': '--..--', '?': '..--..', '\'': '.----.', 
-    '!': '-.-.--', '/': '-..-.', '(': '-.--.', ')': '-.--.-', 
-    '&': '.-...', ':': '---...', ';': '-.-.-.', '=': '-...-', 
-    '+': '.-.-.', '-': '-....-', '_': '..--.-', '"': '.-..-.', 
-    '@': '.--.-.', 
+    '8': '---..', '9': '----.', ' ': '/',
+    '.': '.-.-.-', ',': '--..--', '?': '..--..', '\'': '.----.',
+    '!': '-.-.--', '/': '-..-.', '(': '-.--.', ')': '-.--.-',
+    '&': '.-...', ':': '---...', ';': '-.-.-.', '=': '-...-',
+    '+': '.-.-.', '-': '-....-', '_': '..--.-', '"': '.-..-.',
+    '@': '.--.-.',
     '{': '-.-..-', '}': '-.-.-.', '[': '-.--.', ']': '-.--.-',
     '<': '..-.-', '>': '---.-.'
 }
@@ -67,13 +66,14 @@ class Cryptix:
 
                     if decodeee[: len(known_text)] == known_text:
                         return found_key
-
+                        
                     break
             else:
                 print(f"No key found for digit: {digit}")
                 break
 
         return found_key
+        
     @staticmethod
     def mod_inverse(a, m):
         """Find the modular inverse of a under modulus m."""
@@ -89,13 +89,10 @@ class Cryptix:
         try:
             key_matrix = np.array(key_matrix)
             determinant = int(np.round(np.linalg.det(key_matrix)))
-            
             # Compute modular inverse of determinant
             determinant_inv = Cryptix.mod_inverse(determinant, 26)
-            
             # Calculate the inverse matrix
             key_matrix_inv = determinant_inv * np.round(determinant * np.linalg.inv(key_matrix)).astype(int) % 26
-
             ciphertext_vectors = [ord(char.upper()) - ord('A') for char in ciphertext if char.isalpha()]
             plaintext_vectors = []
 
@@ -687,5 +684,4 @@ class Cryptix:
         reverse_dict = {value: key for key, value in MORSE_CODE_DICT.items()}
         morse_code = morse_code.strip().split(' ')
         decoded_text = ''.join(reverse_dict.get(code, '') for code in morse_code)
-        return decoded_text   
-
+        return decoded_text
