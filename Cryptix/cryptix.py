@@ -66,14 +66,14 @@ class Cryptix:
 
                     if decodeee[: len(known_text)] == known_text:
                         return found_key
-                        
+
                     break
             else:
                 print(f"No key found for digit: {digit}")
                 break
 
         return found_key
-        
+
     @staticmethod
     def mod_inverse(a, m):
         """Find the modular inverse of a under modulus m."""
@@ -146,7 +146,7 @@ class Cryptix:
             except KeyboardInterrupt:
                 break
 
-    @staticmethod            
+    @staticmethod
     def decrypt_affine_cipher(ciphertext, a, b):
         """Decrypts the ciphertext using the Affine cipher with keys a and b."""
         try:
@@ -155,13 +155,11 @@ class Cryptix:
                     if (x * i) % mod == 1:
                         return i
                 return None
-            
             decrypted_text = []
             mod_inv_a = mod_inverse(a, 26)
-            
             if mod_inv_a is None:
                 raise ValueError("No modular inverse exists for the given 'a' value in the Affine Cipher.")
-            
+
             for char in ciphertext:
                 if char.isalpha():
                     base = ord('A') if char.isupper() else ord('a')
@@ -169,10 +167,9 @@ class Cryptix:
                     decrypted_text.append(decrypted_char)
                 else:
                     decrypted_text.append(char)
-            
             return ''.join(decrypted_text)
         except Exception as ex:
-            print(EXCEPTION_MESSAGE, ex)   
+            print(EXCEPTION_MESSAGE, ex)
 
     @staticmethod
     def decrypt_rail_fence_cipher(input_string: str, key: int) -> str:
@@ -228,7 +225,7 @@ class Cryptix:
 
     @staticmethod
     def matrix_generator(key):
-        ''' 
+        '''
         Generate a 5x5 matrix for the Playfair cipher
         Args: key (str) -- The key to generate the matrix
         Returns: 2D list -- A 5x5 matrix
@@ -278,13 +275,13 @@ class Cryptix:
             row_a, col_a = position[a]
             row_b, col_b = position[b]
 
-            if row_a == row_b: 
+            if row_a == row_b:
                 new_a = matrix[row_a][(col_a - 1) % 5]
                 new_b = matrix[row_b][(col_b - 1) % 5]
-            elif col_a == col_b: 
+            elif col_a == col_b:
                 new_a = matrix[(row_a - 1) % 5][col_a]
                 new_b = matrix[(row_b - 1) % 5][col_b]
-            else: 
+            else:
                 new_a = matrix[row_a][col_b]
                 new_b = matrix[row_b][col_a]
 
@@ -295,7 +292,7 @@ class Cryptix:
             if char != "X":
                 decrypted_text += char
 
-        return decrypted_text   
+        return decrypted_text
 
     @staticmethod
     def decrypt_one_time_pad_cipher():
@@ -332,7 +329,7 @@ class Cryptix:
 
         >>> decrypt_xor_cipher_list("hallo\\x00welt", 32)
         ['H', 'A', 'L', 'L', 'O', ' ', 'W', 'E', 'L', 'T']
-        
+
         >>> decrypt_xor_cipher_list("hallo welt", 256)
         ['h', 'a', 'l', 'l', 'o', ' ', 'w', 'e', 'l', 't']
         """
@@ -346,7 +343,6 @@ class Cryptix:
         except (ValueError, TypeError, Exception) as ex:
             print(f"{EXCEPTION_MESSAGE} {ex}")
             return []
-    
 
     @staticmethod
     def decrypt_xor_cipher(content: str, key: int) -> str:
@@ -362,7 +358,6 @@ class Cryptix:
 
         >>> decrypt_xor_cipher_string("hallo\\x00welt", 32)
         'HALLO WELT'
-        
         >>> decrypt_xor_cipher_string("hallo welt", 256)
         'hallo welt'
         """
@@ -376,12 +371,11 @@ class Cryptix:
         except (ValueError, TypeError, Exception) as ex:
             print(f"{EXCEPTION_MESSAGE} {ex}")
             return ""
-        
+
     @staticmethod
     def decrypt_bacon_cipher(ciphertext):
         """
         Decrypts a string of Bacon's cipher text into plaintext.
-        
         :param ciphertext: A string where each letter represents a part of Bacon's cipher.
         :return: The decrypted plaintext string.
         """
@@ -396,11 +390,9 @@ class Cryptix:
 
         plaintext = ""
         ciphertext = ciphertext.replace(' ', '').upper()  # Remove spaces and convert to uppercase
-        
         for i in range(0, len(ciphertext), 5):
             cipher_group = ciphertext[i:i+5]
             plaintext += bacon_dict.get(cipher_group, '?')  # Use '?' for invalid groups
-        
         return plaintext
     @staticmethod
     def decrypt_columnar_transposition_cipher(ciphertext, keyword):
@@ -411,10 +403,8 @@ class Cryptix:
             sorted_keyword = sorted([(char, i) for i, char in enumerate(keyword)], key=lambda x: x[0])
             ordered_cols = [ciphertext[i*n_rows:(i+1)*n_rows] for i in range(n_cols)]
             matrix = [''] * n_cols
-            
             for i, (_, original_pos) in enumerate(sorted_keyword):
                 matrix[original_pos] = ordered_cols[i]
-            
             decrypted_text = ''.join(''.join(row) for row in zip(*matrix))
 
             return decrypted_text
@@ -427,7 +417,7 @@ class Cryptix:
         try:
             return "".join([chr(ord(text[i]) ^ int(keys[i])) for i in range(len(text))])
         except Exception as ex:
-            print(EXCEPTION_MESSAGE, ex)    
+            print(EXCEPTION_MESSAGE, ex)
 
     @staticmethod
     def decrypt_atbash_cipher(text):
@@ -501,7 +491,7 @@ class Cryptix:
             ciphertext_bytes = base64.b64decode(ciphertext)
             print("Decoded ciphertext bytes:", ciphertext_bytes)
             print()
-            
+
             # Load the private key
             with open(private_key_path, 'rb') as key_file:
                 private_key = serialization.load_pem_private_key(
@@ -519,7 +509,7 @@ class Cryptix:
                 ),
                 "PKCS1v15 (legacy)": padding.PKCS1v15()  # Similar to PKCS1v15
             }
-            
+
             # Try decrypting with different paddings and print results
             for pad_name, pad in paddings.items():
                 try:
@@ -532,11 +522,10 @@ class Cryptix:
                     print()
                 except Exception as e:
                     print(f"Failed to decrypt with {pad_name}: {e}")
-            
         except Exception as ex:
             print(EXCEPTION_MESSAGE, ex)
             return ""
-        
+
 
     @staticmethod
     def decrypt_rot5_cipher(text):
@@ -550,7 +539,7 @@ class Cryptix:
                 decrypted_text += str(index % 10)
             else:
                 decrypted_text += l
-        return decrypted_text    
+        return decrypted_text
 
     ## Below this are the functions for decoding the Encoded text
 
@@ -600,19 +589,19 @@ class Cryptix:
     def decode_base32_encoding(char: str) -> str:
         """Returns the decrypted text for Base32."""
         base32_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567="
-            
+
         # Remove padding characters
         char = char.rstrip("=")
-            
+
         # Map Base32 characters to their binary equivalents
         base32_to_bin = {c: format(base32_alphabet.index(c), '05b') if c in base32_alphabet else None for c in char}
-            
+
         # Filter out None values and convert to binary string
         binary_string = ''.join(b for b in map(base32_to_bin.get, char) if b is not None)
-            
+
         # Split binary string into 8-bit chunks and convert to ASCII
         decoded_text = ''.join(chr(int(binary_string[i:i+8], 2)) for i in range(0, len(binary_string), 8))
-            
+
         return decoded_text
 
     @staticmethod
@@ -623,10 +612,10 @@ class Cryptix:
 
         # Create a dictionary for Base64 to binary conversion
         base64_to_bin = {c: format(i, '06b') for i, c in enumerate(base64_alphabet)}
-        
+
         # Remove padding characters
         encoded_str = encoded_str.rstrip(padding)
-        
+
         # Convert Base64 string to binary string
         try:
             binary_string = ''.join(base64_to_bin[c] for c in encoded_str)
@@ -636,40 +625,39 @@ class Cryptix:
         # Handle padding to complete the binary string to byte-aligned length
         if len(binary_string) % 8 != 0:
             binary_string = binary_string + '0' * (8 - len(binary_string) % 8)
-        
+
         # Convert binary string to bytes
         decoded_bytes = bytearray()
         for i in range(0, len(binary_string), 8):
             byte = binary_string[i:i+8]
             decoded_bytes.append(int(byte, 2))
-        
+
         # Convert bytes to string
         try:
             decoded_text = decoded_bytes.decode('utf-8')
         except UnicodeDecodeError:
             raise ValueError("Error decoding Base64 string: contains invalid UTF-8 characters")
 
-        return decoded_text   
+        return decoded_text
 
     @staticmethod
     def decode_base58_encoding(char: str) -> str:
         """Returns the decrypted text for Base58."""
         base58_alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz!#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
-        
+
         # Create a dictionary for Base58 to integer conversion
         base58_to_int = {c: i for i, c in enumerate(base58_alphabet)}
-        
+
         # Convert Base58 string to integer
         num = 0
         for c in char:
             num = num * 58 + base58_to_int[c]
-        
+
         # Convert integer to bytes
         decoded_bytes = bytearray()
         while num > 0:
             num, rem = divmod(num, 256)
             decoded_bytes.insert(0, rem)
-        
         # Convert bytes to string
         try:
             decoded_text = bytes(decoded_bytes).decode('utf-8')
