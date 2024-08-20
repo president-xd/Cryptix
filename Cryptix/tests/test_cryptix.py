@@ -1,6 +1,8 @@
 import unittest
 from Cryptix import Cryptix
-
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 class TestCryptix(unittest.TestCase):
 
     def test_decode_char(self):
