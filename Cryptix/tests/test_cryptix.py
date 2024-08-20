@@ -1,5 +1,5 @@
 import unittest
-from cryptix import Cryptix
+from Cryptix import Cryptix
 
 class TestCryptix(unittest.TestCase):
 
