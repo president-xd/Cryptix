@@ -1,0 +1,37 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Python package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install flake8 pytest
+        if [ -f requirements.txt ]; then pip install -r Cryptix/requirements.txt; fi
+    - name: Lint with flake8
+      run: |
+          flake8 . --ignore=E101,E111,E112,E113,E114,E115,E116,E117,E118,E120,E121,E122,E123,E124,E125,E126,E127,E128,E129,E131,E133,E134,E135,E136,E137,E138,E139,E140,E141,E142,E143,E144,E145,E146,E147,E148,E201,E202,E203,E204,E205,E206,E207,E208,E211,E212,E213,E214,E215,E216,E217,E218,E221,E222,E223,E224,E225,E226,E227,E228,E231,E251,E261,E262,E265,E266,E271,E272,E273,E274,E275,E301,E302,E303,E304,E305,E306,E307,E308,E401,E402,E403,E404,E405,E406,E407,E501,E502,E701,E702,E703,E704,E711,E712,E713,E714,E721,E722,E731,E741,E742,E743,E902,W291,W293,W391,W505,W606,W607,W608,F401,W605
+    - name: Test with pytest
+      run: |
+        pytest
