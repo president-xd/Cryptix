@@ -1,0 +1,47 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install -r Cryptix/requirements.txt
+
+      - name: Lint code
+        run: |
+          flake8 Cryptix
+
+      - name: Run tests
+        run: |
+          python -m unittest discover -s Cryptix/tests
+
+      - name: Code coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.xml
+
+      - name: Build package
+        run: |
+          python setup.py sdist bdist_wheel
+
+      - name: Upload Python Package
+        uses: pypa/gh-action-pypi-publish@v2
+        with:
+          user: ${{ secrets.pypi_username }}
+          password: ${{ secrets.pypi_token }}
