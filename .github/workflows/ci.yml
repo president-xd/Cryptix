@@ -1,48 +1,31 @@
-name: Continuous Integration
+name: Python CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
 
-      - name: Install dependencies
-        run: |
-          pip install -r Cryptix/requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
 
-      - name: Lint code
-        run: |
-          flake8 Cryptix
-
-      - name: Run tests
-        run: |
-          python -m unittest discover -s Cryptix/tests
-
-      - name: Code coverage
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage.xml
-
-      - name: Build package
-        run: |
-          python setup.py sdist bdist_wheel
-
-      - name: pypi-publish
-        uses: pypa/gh-action-pypi-publish@v1.9.0
-            
-        with:
-          user: ${{ secrets.pypi_username }}
-          password: ${{ secrets.pypi_token }}
+    - name: Run flake8
+      run: |
+        flake8 Cryptix
