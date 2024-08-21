@@ -36,3 +36,5 @@ If applicable, add screenshots to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+Example: "This issue started occurring after the latest update to version 1.3.2 of the application. It does not seem to affect smaller files or files with different formats."
