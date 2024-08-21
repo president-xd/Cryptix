@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v0.1.1'  # Match tags that follow semantic versioning
+      - 'v0.1.1'  # This matches tags like v0.1.2, v1.0.0, etc.
 
 jobs:
   release:
@@ -20,6 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+          pip install twine
 
       - name: Build and publish
         env:
