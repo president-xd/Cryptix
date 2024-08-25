@@ -708,3 +708,43 @@ class Cryptix:
 
 
 
+    
+
+############################################################################################################################################
+#                                            Encoding Functions begin here                                                                 #
+############################################################################################################################################
+
+
+    @staticmethod
+    def base32_encode(text):
+        """
+        Encodes the input string into Base32 manually.
+    
+        Parameters:
+        - text (str): The string to be encoded.
+    
+        Returns:
+        - str: The Base32 encoded string.
+        """
+        # Base32 alphabet
+        base32_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
+        
+        # Convert input text to binary string
+        binary_string = ''.join(f'{ord(char):08b}' for char in text)
+        
+        # Add padding to make binary string length a multiple of 5
+        padding = (5 - len(binary_string) % 5) % 5
+        binary_string += '0' * padding
+        
+        # Encode binary string into Base32
+        base32_string = []
+        for i in range(0, len(binary_string), 5):
+            chunk = binary_string[i:i+5]
+            index = int(chunk, 2)
+            base32_string.append(base32_alphabet[index])
+        
+        # Add padding character '='
+        padding_chars = '=' * (padding // 5)
+        base32_string.append(padding_chars)
+        
+        return ''.join(base32_string)
