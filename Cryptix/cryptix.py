@@ -716,7 +716,7 @@ class Cryptix:
 
 
     @staticmethod
-    def base32_encode(text):
+    def encode_base32_encoding(text):
         """
         Encodes the input string into Base32 manually.
     
