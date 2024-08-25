@@ -673,3 +673,38 @@ class Cryptix:
         morse_code = morse_code.strip().split(' ')
         decoded_text = ''.join(reverse_dict.get(code, '') for code in morse_code)
         return decoded_text
+
+
+############################################################################################################################################
+                                            Encryption Functions begin here
+############################################################################################################################################
+
+    @staticmethod
+    def encrypt_caeser_cipher(plaintext, shift):
+        """
+        Encrypts the input string using the Caesar cipher with the specified shift.
+
+        Parameters:
+        - plaintext (str): The string to be encrypted.
+        - shift (int): The number of positions to shift each letter.
+
+        Returns:
+        - str: The encrypted string.
+        """
+        encrypted_text = []
+    
+        for char in plaintext:
+            if char.isalpha():  # Check if the character is a letter
+                # Determine if it's uppercase or lowercase
+                start = ord('A') if char.isupper() else ord('a')
+                # Encrypt the character and handle wrap-around using modulo operation
+                encrypted_char = chr(start + (ord(char) - start + shift) % 26)
+                encrypted_text.append(encrypted_char)
+            else:
+                # Non-alphabetic characters are added unchanged
+                encrypted_text.append(char)
+    
+        return ''.join(encrypted_text)
+
+
+
