@@ -1,6 +1,6 @@
 # Cryptix Package Usage
 
-## Overview:
+## Overview
 
 The Cryptix a powerful python library which provides decryption functions for various ciphers. Below are examples demonstrating how to use the decryption functions for different ciphers included in the package.
 
