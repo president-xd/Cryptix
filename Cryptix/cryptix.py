@@ -149,27 +149,21 @@ class Cryptix:
     @staticmethod
     def decrypt_affine_cipher(ciphertext, a, b):
         """Decrypts the ciphertext using the Affine cipher with keys a and b."""
-        try:
-            def mod_inverse(x, mod):
-                for i in range(mod):
-                    if (x * i) % mod == 1:
-                        return i
-                return None
-            decrypted_text = []
-            mod_inv_a = mod_inverse(a, 26)
-            if mod_inv_a is None:
-                raise ValueError("No modular inverse exists for the given 'a' value in the Affine Cipher.")
-
-            for char in ciphertext:
-                if char.isalpha():
-                    base = ord('A') if char.isupper() else ord('a')
-                    decrypted_char = chr((mod_inv_a * (ord(char) - base - b)) % 26 + base)
-                    decrypted_text.append(decrypted_char)
+        result = ""
+        a_inv = 0
+        for i in range(26):
+            if (a * i) % 26 == 1:
+                a_inv = i
+                break
+        for char in ciphertext:
+            if char.isalpha():
+                if char.isupper():
+                    result += chr( (a_inv * (ord(char) - ord('A') - b)) % 26 + ord('A') )
                 else:
-                    decrypted_text.append(char)
-            return ''.join(decrypted_text)
-        except Exception as ex:
-            print(EXCEPTION_MESSAGE, ex)
+                    result += chr( (a_inv * (ord(char) - ord('a') - b)) % 26 + ord('a') )
+            else:
+                result += char
+        return result
 
     @staticmethod
     def decrypt_rail_fence_cipher(input_string: str, key: int) -> str:
